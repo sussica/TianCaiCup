@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "750164884806",
+    "firebase_url": "https://amiclose-9a5b0.firebaseio.com",
+    "project_id": "amiclose-9a5b0",
+    "storage_bucket": "amiclose-9a5b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750164884806:android:1bb2a432f4567bef",
+        "android_client_info": {
+          "package_name": "com.amiclose.tian_cai_cup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "750164884806-acscf7kn5urie95vegb21h2ubpmjp2aq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyroVFtpOmjtm_75Esd-C-jbXlRSpAtWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "750164884806-acscf7kn5urie95vegb21h2ubpmjp2aq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

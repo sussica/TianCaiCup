@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>750164884806-747v7mjo2gf6kg74kh4mrmbaeoe1oluf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.750164884806-747v7mjo2gf6kg74kh4mrmbaeoe1oluf</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDkcHm0zAGSs_dAk06ry6lR9VwW2F-kh-Y</string>
+	<key>GCM_SENDER_ID</key>
+	<string>750164884806</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.amiclose.tiancaicup</string>
+	<key>PROJECT_ID</key>
+	<string>amiclose-9a5b0</string>
+	<key>STORAGE_BUCKET</key>
+	<string>amiclose-9a5b0.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:750164884806:ios:c17c85a9102658e9</string>
+	<key>DATABASE_URL</key>
+	<string>https://amiclose-9a5b0.firebaseio.com</string>
+</dict>
+</plist>

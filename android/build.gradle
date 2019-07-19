@@ -6,8 +6,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        // The Firebase auth lib use androidX.
+        // Fixing AndroidX crashes in a Flutter app
+        // https://flutter.dev/docs/development/packages-and-plugins/androidx-compatibility
+        classpath 'com.android.tools.build:gradle:3.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.2.0'
     }
 }
 
