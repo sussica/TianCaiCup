@@ -30,11 +30,12 @@ class _HomePage extends StatefulWidget {
 
 class _HomePageState extends State<_HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   // current login user
   FirebaseUser _user;
   StreamSubscription<FirebaseUser> _subscription;
 
-  var _selectedIndex = 0;
+  var _selectedIndex = 2;
 
   static TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -82,17 +83,17 @@ class _HomePageState extends State<_HomePage> {
       padding: const EdgeInsets.fromLTRB(8, 5, 8, 5),
       avoidBottomInset: true,
       color: Colors.white,
-      providers: [
-        ProvidersTypes.google,
-        ProvidersTypes.email
-      ],
+      providers: [ProvidersTypes.google, ProvidersTypes.email],
     );
   }
+
+  var NavBarScaffoldKey = new GlobalKey<ScaffoldState>();
 
   // Build Bottom NavigationBar
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: NavBarScaffoldKey,
       appBar: AppBar(
         title: Text("AmIClose"),
       ),
@@ -115,9 +116,16 @@ class _HomePageState extends State<_HomePage> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,
         onTap: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
+          if (_user == null) {
+            NavBarScaffoldKey.currentState.showSnackBar(SnackBar(
+              content: Text("Please Sign In to use the app :D",
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 15)),
+            ));
+          } else {
+            setState(() {
+              _selectedIndex = index;
+            });
+          }
         },
       ),
     );
@@ -153,7 +161,9 @@ class MeFragment extends StatelessWidget {
               Text(user.displayName ?? user.email),
               RaisedButton(
                   color: Colors.blue,
-                  child: new Text("Logout",),
+                  child: new Text(
+                    "Logout",
+                  ),
                   onPressed: _logout)
             ],
           )));
