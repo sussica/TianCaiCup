@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:geolocator/geolocator.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui/flutter_firebase_ui.dart';
+
+import 'package:tian_cai_cup/database.dart';
 
 void main() => runApp(MyApp());
 
@@ -87,13 +91,13 @@ class _HomePageState extends State<_HomePage> {
     );
   }
 
-  var NavBarScaffoldKey = new GlobalKey<ScaffoldState>();
+  var navBarScaffoldKey = new GlobalKey<ScaffoldState>();
 
   // Build Bottom NavigationBar
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: NavBarScaffoldKey,
+      key: navBarScaffoldKey,
       appBar: AppBar(
         title: Text("AmIClose"),
       ),
@@ -117,7 +121,7 @@ class _HomePageState extends State<_HomePage> {
         selectedItemColor: Colors.blue,
         onTap: (int index) {
           if (_user == null) {
-            NavBarScaffoldKey.currentState.showSnackBar(SnackBar(
+            navBarScaffoldKey.currentState.showSnackBar(SnackBar(
               content: Text("Please Sign In to use the app :D",
                   textAlign: TextAlign.center, style: TextStyle(fontSize: 15)),
             ));
