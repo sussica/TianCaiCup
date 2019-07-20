@@ -83,7 +83,7 @@ class _HomePageState extends State<_HomePage> {
       avoidBottomInset: true,
       color: Colors.white,
       providers: [
-        //ProvidersTypes.google,
+        ProvidersTypes.google,
         ProvidersTypes.email
       ],
     );
