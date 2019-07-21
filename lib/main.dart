@@ -54,6 +54,7 @@ class _HomePageState extends State<_HomePage> {
     super.initState();
     _checkCurrentUser();
     _initLocationPermission();
+    _initLocationUploader();
   }
 
   @override
@@ -83,6 +84,32 @@ class _HomePageState extends State<_HomePage> {
             textAlign: TextAlign.center, style: TextStyle(fontSize: 15)),
       ));
     }
+  }
+
+  /// Listen for location changes and upload uses's location only when logined in and
+  void _initLocationUploader() {
+    var locationOptions =
+        LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 5);
+    _positionSubscription = Geolocator()
+        .getPositionStream(locationOptions)
+        .listen((Position position) {
+      if (_user != null) {
+        DatabaseReference userRef = FirebaseDatabase.instance
+            .reference()
+            .child(FirebaseWrapper.userKey)
+            .child(_user.uid);
+        userRef.set({
+          'name': _user.displayName,
+          'position':
+              SimplePosition(position.latitude, position.longitude).toString(),
+        });
+      }
+      print(position == null
+          ? 'Unknown'
+          : position.latitude.toString() +
+              ', ' +
+              position.longitude.toString());
+    });
   }
 
   // todo map, friends page
