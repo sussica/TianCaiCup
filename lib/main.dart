@@ -5,6 +5,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui/flutter_firebase_ui.dart';
+import 'package:firebase_database/firebase_database.dart';
+// for PlatformException
+import 'package:flutter/services.dart';
 
 import 'package:tian_cai_cup/database.dart';
 
@@ -37,7 +40,8 @@ class _HomePageState extends State<_HomePage> {
 
   // current login user
   FirebaseUser _user;
-  StreamSubscription<FirebaseUser> _subscription;
+  StreamSubscription<FirebaseUser> _userSubscription;
+  StreamSubscription<Position> _positionSubscription;
 
   var _selectedIndex = 2;
 
@@ -49,12 +53,36 @@ class _HomePageState extends State<_HomePage> {
   void initState() {
     super.initState();
     _checkCurrentUser();
+    _initLocationPermission();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _subscription.cancel();
+    _userSubscription.cancel();
+    _positionSubscription.cancel();
+  }
+
+  void _initLocationPermission() async {
+    try {
+      Geolocator()
+          .checkGeolocationPermissionStatus()
+          .then((GeolocationStatus status) {
+        print("location permission: " + status.toString());
+        if (status == GeolocationStatus.denied) {
+          navBarScaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text("Please allow access to location in setting",
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 15)),
+          ));
+        }
+      });
+    } on PlatformException catch (e) {
+      print(e.message);
+      navBarScaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(e.message,
+            textAlign: TextAlign.center, style: TextStyle(fontSize: 15)),
+      ));
+    }
   }
 
   // todo map, friends page
@@ -140,7 +168,7 @@ class _HomePageState extends State<_HomePage> {
     _user = await _auth.currentUser();
     _user?.getIdToken(refresh: true);
     // called when user sign in and sign out
-    _subscription = _auth.onAuthStateChanged.listen((FirebaseUser user) {
+    _userSubscription = _auth.onAuthStateChanged.listen((FirebaseUser user) {
       setState(() {
         _user = user;
       });
