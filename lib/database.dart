@@ -1,13 +1,26 @@
 library firebase_wrapper;
+import 'dart:async';
 
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:geolocator/geolocator.dart';
 
+/// Data Structure:
+/// Users {
+/// [
+///   <id>:{
+///     name: <name>
+///     position: <latitude>#<longitude>,
+///     friends: [<id1>, <id2>]
+///   }
+/// ]
+///
 class FirebaseWrapper {
-
-  final _userKey = "users";
+  static const userKey = "users";
   var _id;
-  var _friendKey = "friends";
+  static const nameKey = "name";
+  static const positionKey = "position";
+  static const friendKey = "friends";
 
   User me;
 
@@ -18,10 +31,10 @@ class FirebaseWrapper {
   static FirebaseWrapper _firebase;
 
   FirebaseWrapper._private(FirebaseUser user) {
-    _rootReference = FirebaseDatabase.instance.reference().child(_userKey);
-    _id = user.getIdToken();
+    _rootReference = FirebaseDatabase.instance.reference().child(userKey);
+    _id = user.uid;
     _me = _rootReference.child(_id);
-    _myFriends = _me.child(_friendKey);
+    _myFriends = _me.child(friendKey);
     // TODO: set me
     me;
   }
@@ -56,29 +69,70 @@ class FirebaseWrapper {
     // Return list of friends close to us
     return null;
   }
-
 }
 
 class User {
-  String id;
-  String name;
-  Position position;
+  String _id;
+  String _name;
+  SimplePosition position;
 
-  User(String name, Position position, {String id = ""}) {
-      this.name = name;
-      this.position = position;
-      this.id = id;
+  String get id => _id;
+
+  String get name => _name;
+
+  User(String name, SimplePosition position, {String id = ""}) {
+    this._name = name;
+    this.position = position;
+    this._id = id;
   }
-
 }
 
-class Position {
-  double xCoordinate;
-  double yCoordinate;
+/// Rename to SimplePosition to avoid duplicate with Position in geolocator.dart
+class SimplePosition {
+  // default 50 meter
+  int closeDistance = 50;
+  double latitude;
+  double longitude;
 
-  Position(double xCoordinate, double yCoordinate) {
-    this.xCoordinate = xCoordinate;
-    this.yCoordinate = yCoordinate;
+  SimplePosition(this.latitude, this.longitude);
+
+  /// return true when distance no greater than closeDistance
+  Future<bool> isClose2(SimplePosition other) async {
+    return Geolocator().distanceBetween(this.latitude, this.longitude, other.latitude, other.longitude).then((double distance) {
+      print("distance: $distance");
+      return distance <= closeDistance;
+    });
   }
 
+  static SimplePosition decode(String s) {
+    try {
+      List<String> pos = s.split("#");
+      return SimplePosition(double.parse(pos[0]), double.parse(pos[1]));
+    } on Exception {
+      return null;
+    }
+  }
+
+  /// encode position to format: latitude#longitude
+  static String encode(SimplePosition position) {
+    return '${position.latitude}#${position.longitude}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is SimplePosition &&
+              runtimeType == other.runtimeType &&
+              latitude == other.latitude &&
+              longitude == other.longitude;
+
+  @override
+  int get hashCode =>
+      latitude.hashCode ^
+      longitude.hashCode;
+
+  @override
+  String toString() {
+    return '$latitude#$longitude';
+  }
 }
